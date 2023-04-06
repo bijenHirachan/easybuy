@@ -4,6 +4,8 @@ import ErrorHandler from "../utils/ErrorHandler.js";
 import { sendToken } from "../utils/sendToken.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import crypto from "crypto";
+import getDataUri from "../utils/dataUri.js";
+import cloudinary from "cloudinary";
 
 export const getUsers = catchAsyncErrors(async (req, res, next) => {
   const users = await User.find();
@@ -14,24 +16,41 @@ export const getUsers = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+export const getMyProfile = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
 export const register = catchAsyncErrors(async (req, res, next) => {
   const { name, email, password } = req.body;
 
-  if (!name || !email || !password)
+  const file = req.file;
+
+  if (!name || !email || !password || !file)
     return next(new ErrorHandler("All fields are required", 400));
 
   const userExist = await User.findOne({ email });
 
   if (userExist)
-    return next(new ErrorHandler("Email has already been taken", 400));
+    return next(new ErrorHandler("Email has already been taken", 409));
+
+  const fileUri = getDataUri(file);
+
+  const myCloud = await cloudinary.v2.uploader.upload(fileUri.content, {
+    folder: "/easybuy/avatars",
+  });
 
   const user = await User.create({
     name,
     email,
     password,
     avatar: {
-      public_id: "test",
-      url: "url",
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
     },
   });
 
@@ -161,5 +180,70 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
   return res.status(200).json({
     success: true,
     message: "Password reset successful",
+  });
+});
+
+export const updateUserRole = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+
+  const user = await User.findById(id);
+
+  if (!user) return next(new ErrorHandler("User doesn't exist", 404));
+
+  if (user.role === "admin") user.role = "user";
+  else user.role = "admin";
+
+  await user.save();
+
+  return res.status(200).json({
+    success: true,
+    message: "User role updated successfully",
+  });
+});
+
+export const deleteUser = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+
+  const user = await User.findById(id);
+
+  if (!user) return next(new ErrorHandler("User doesn't exist", 404));
+
+  await cloudinary.v2.uploader.destroy(user.avatar.public_id, {
+    folder: "/easybuy/avatars",
+  });
+
+  await user.deleteOne();
+
+  return res.status(200).json({
+    success: true,
+    message: "User deleted successfully",
+  });
+});
+
+export const updateProfilePicture = catchAsyncErrors(async (req, res, next) => {
+  const file = req.file;
+
+  if (!next) return next(new ErrorHandler("All fields are required", 400));
+
+  const fileUri = getDataUri(file);
+
+  const user = await User.findById(req.user._id);
+
+  await cloudinary.v2.uploader.destroy(user.avatar.public_id, {
+    folder: "/easybuy/avatars",
+  });
+
+  const myCloud = await cloudinary.v2.uploader.upload(fileUri.content, {
+    folder: "/easybuy/avatars",
+  });
+
+  user.avatar.public_id = myCloud.public_id;
+  user.avatar.url = myCloud.secure_url;
+
+  await user.save();
+
+  return res.status(200).json({
+    success: true,
+    message: "Profile picture updated successfully",
   });
 });
