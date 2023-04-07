@@ -4,13 +4,13 @@ import {
   Button,
   FormControl,
   FormLabel,
-  Heading,
   Input,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { register } from "../redux/actions/userActions";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const fileUploadCSS = {
   cursor: "pointer",
@@ -34,6 +34,10 @@ const Register = ({ isAuthenticated }) => {
   const [imagePreview, setImagePreview] = useState("");
 
   const dispatch = useDispatch();
+
+  const toast = useToast();
+
+  const { error, message } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
 
@@ -59,16 +63,27 @@ const Register = ({ isAuthenticated }) => {
     myForm.append("file", image);
 
     await dispatch(register(myForm));
-    setEmail("");
-    setPassword("");
-    setImage("");
-    setImagePreview("");
-    navigate("/");
   };
 
   useEffect(() => {
     if (isAuthenticated) navigate("/");
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        description: error,
+        status: "error",
+      });
+    }
+    if (message) {
+      toast({
+        description: message,
+        status: "success",
+      });
+      navigate("/login");
+    }
+  }, [dispatch, error, message]);
 
   return (
     <Box marginTop={"48px"}>
@@ -87,6 +102,7 @@ const Register = ({ isAuthenticated }) => {
               placeholder="Enter name"
               value={name}
               type="text"
+              focusBorderColor="primary.dark"
               onChange={(e) => setName(e.target.value)}
             />
           </FormControl>
@@ -99,6 +115,7 @@ const Register = ({ isAuthenticated }) => {
               id="email"
               type="email"
               placeholder="abc@example.com"
+              focusBorderColor="primary.dark"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -112,6 +129,7 @@ const Register = ({ isAuthenticated }) => {
               type="password"
               id="password"
               placeholder="Enter password"
+              focusBorderColor="primary.dark"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -130,7 +148,7 @@ const Register = ({ isAuthenticated }) => {
             />
           </FormControl>
 
-          <FormControl my={16}>
+          <FormControl my={8}>
             <Button
               type="submit"
               color={"white"}
@@ -140,6 +158,21 @@ const Register = ({ isAuthenticated }) => {
               Sign Up
             </Button>
           </FormControl>
+
+          <Box
+            my={4}
+            fontSize={"sm"}
+            fontWeight={"semibold"}
+            color={"black100"}
+          >
+            Already Registered?{" "}
+            <Link to={"/login"}>
+              <Button fontSize={"sm"} colorScheme={"purple"} variant="link">
+                Login
+              </Button>{" "}
+            </Link>
+            here
+          </Box>
         </form>
       </Box>
     </Box>

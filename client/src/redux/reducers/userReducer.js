@@ -16,11 +16,86 @@ const logoutRequest = createAction("logoutRequest");
 const logoutSuccess = createAction("logoutSuccess");
 const logoutFail = createAction("logoutFail");
 
+const changePasswordRequest = createAction("changePasswordRequest");
+const changePasswordSuccess = createAction("changePasswordSuccess");
+const changePasswordFail = createAction("changePasswordFail");
+
+const updateProfileRequest = createAction("updateProfileRequest");
+const updateProfileSuccess = createAction("updateProfileSuccess");
+const updateProfileFail = createAction("updateProfileFail");
+
+const updateAvatarRequest = createAction("updateAvatarRequest");
+const updateAvatarSuccess = createAction("updateAvatarSuccess");
+const updateAvatarFail = createAction("updateAvatarFail");
+
+const forgotPasswordRequest = createAction("forgotPasswordRequest");
+const forgotPasswordSuccess = createAction("forgotPasswordSuccess");
+const forgotPasswordFail = createAction("forgotPasswordFail");
+
+const resetPasswordRequest = createAction("resetPasswordRequest");
+const resetPasswordSuccess = createAction("resetPasswordSuccess");
+const resetPasswordFail = createAction("resetPasswordFail");
+
 const clearMessage = createAction("clearMessage");
 const clearError = createAction("clearError");
 
 export const userReducer = createReducer({}, (builder) => {
   builder
+    .addCase(resetPasswordRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(resetPasswordSuccess, (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase(resetPasswordFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase(forgotPasswordRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(forgotPasswordSuccess, (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase(forgotPasswordFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase(updateAvatarRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(updateAvatarSuccess, (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase(updateAvatarFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase(changePasswordRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(changePasswordSuccess, (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase(changePasswordFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase(updateProfileRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(updateProfileSuccess, (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase(updateProfileFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
     .addCase(loginRequest, (state) => {
       state.loading = true;
     })

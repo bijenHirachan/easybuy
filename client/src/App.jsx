@@ -10,15 +10,26 @@ import Register from "./pages/Register";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "./redux/actions/userActions";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import ChangePassword from "./pages/ChangePassword";
+import Profile from "./pages/Profile";
 
 function App() {
   const dispatch = useDispatch();
 
-  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { isAuthenticated, user, error, message } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     dispatch(loadUser());
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch({ type: "clearError" });
+    dispatch({ type: "clearMessage" });
+  }, [dispatch, error, message]);
 
   return (
     <Router>
@@ -35,6 +46,22 @@ function App() {
           <Route
             path="/register"
             element={<Register isAuthenticated={isAuthenticated} />}
+          />
+          <Route
+            path="/changepassword"
+            element={<ChangePassword isAuthenticated={isAuthenticated} />}
+          />
+          <Route
+            path="/profile"
+            element={<Profile user={user} isAuthenticated={isAuthenticated} />}
+          />
+          <Route
+            path="/forgotpassword"
+            element={<ForgotPassword isAuthenticated={isAuthenticated} />}
+          />
+          <Route
+            path="/resetpassword/:token"
+            element={<ResetPassword isAuthenticated={isAuthenticated} />}
           />
         </Routes>
       </Container>

@@ -3,13 +3,13 @@ import {
   Button,
   FormControl,
   FormLabel,
-  Heading,
   Input,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/actions/userActions";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = ({ isAuthenticated }) => {
   const [email, setEmail] = useState("");
@@ -17,19 +17,38 @@ const Login = ({ isAuthenticated }) => {
 
   const dispatch = useDispatch();
 
+  const { error, message } = useSelector((state) => state.user);
+
   const navigate = useNavigate();
+
+  const toast = useToast();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     await dispatch(login(email, password));
-    setEmail("");
-    setPassword("");
-    navigate("/");
   };
 
   useEffect(() => {
     if (isAuthenticated) navigate("/");
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        description: error,
+        status: "error",
+      });
+    }
+    if (message) {
+      toast({
+        description: message,
+        status: "success",
+      });
+      setEmail("");
+      setPassword("");
+      navigate("/");
+    }
+  }, [dispatch, error, message]);
 
   return (
     <Box marginTop={"48px"}>
@@ -45,6 +64,7 @@ const Login = ({ isAuthenticated }) => {
               placeholder="Enter email"
               value={email}
               type="text"
+              focusBorderColor="primary.dark"
               onChange={(e) => setEmail(e.target.value)}
             />
           </FormControl>
@@ -58,11 +78,20 @@ const Login = ({ isAuthenticated }) => {
               placeholder="Enter password"
               value={password}
               type="password"
+              focusBorderColor="primary.dark"
               onChange={(e) => setPassword(e.target.value)}
             />
           </FormControl>
 
-          <FormControl my={16}>
+          <Box my={4}>
+            <Link to={"/forgotpassword"}>
+              <Button fontSize={"sm"} variant="link" color={"black100"}>
+                Forget Password?
+              </Button>
+            </Link>
+          </Box>
+
+          <FormControl my={8}>
             <Button
               type="submit"
               color={"white"}
@@ -72,6 +101,16 @@ const Login = ({ isAuthenticated }) => {
               Log In
             </Button>
           </FormControl>
+
+          <Box fontSize={"sm"} fontWeight={"semibold"} color={"black100"}>
+            New User?{" "}
+            <Link to={"/register"}>
+              <Button fontSize={"sm"} colorScheme={"purple"} variant="link">
+                Sign Up
+              </Button>{" "}
+            </Link>
+            here
+          </Box>
         </form>
       </Box>
     </Box>

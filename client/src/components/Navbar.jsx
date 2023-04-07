@@ -6,9 +6,11 @@ import {
   Input,
   IconButton,
   Avatar,
-  VStack,
-  useDisclosure,
-  SlideFade,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Text,
 } from "@chakra-ui/react";
 import { AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
 import { RxCaretDown } from "react-icons/rx";
@@ -18,13 +20,11 @@ import { BiLogIn, BiLogOut } from "react-icons/bi";
 import { SiGnuprivacyguard } from "react-icons/si";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { CgProfile } from "react-icons/cg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/actions/userActions";
 
 const Navbar = ({ isAuthenticated, user }) => {
   const dispatch = useDispatch();
-
-  const { isOpen, onToggle } = useDisclosure();
 
   const logoutHandler = () => {
     dispatch(logout());
@@ -51,75 +51,59 @@ const Navbar = ({ isAuthenticated, user }) => {
             focusBorderColor="primary.dark"
           />
         </Box>
-        <HStack gap={4} alignItems={"center"} position={"relative"}>
-          <IconButton
-            color={"black100"}
-            icon={<Avatar size={"xs"} />}
-            onClick={onToggle}
-            variant={"link"}
-          />
+        <HStack gap={4} alignItems={"center"}>
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              color={"black100"}
+              icon={<Avatar size={"xs"} />}
+              variant={"link"}
+            />
 
-          <Box position={"absolute"} top={8} right={32}>
-            <SlideFade in={isOpen}>
-              <Box
-                p={4}
-                border={"1px solid rgba(83, 78, 97, 0.3)"}
-                borderRadius={4}
-              >
-                {isAuthenticated ? (
-                  <VStack alignItems={"flex-start"} gap={1}>
-                    <Button
-                      onClick={logoutHandler}
-                      variant={"link"}
-                      leftIcon={<BiLogOut />}
-                      color={"black100"}
-                    >
-                      Logout
-                    </Button>
-                    <Button
-                      color={"black100"}
-                      leftIcon={<RiLockPasswordLine />}
-                      variant={"link"}
-                      onClick={onToggle}
-                    >
-                      Change Password
-                    </Button>
-                    <Button
-                      color={"black100"}
-                      leftIcon={<CgProfile />}
-                      variant={"link"}
-                      onClick={onToggle}
-                    >
-                      Update Profile
-                    </Button>
-                  </VStack>
-                ) : (
-                  <VStack alignItems={"flex-start"} gap={1}>
-                    <Link to="/login">
-                      <Button
-                        leftIcon={<BiLogIn />}
-                        variant={"link"}
-                        color={"black100"}
-                        onClick={onToggle}
-                      >
-                        Login
-                      </Button>
-                    </Link>
-                    <Link to="/register">
-                      <Button
-                        leftIcon={<SiGnuprivacyguard />}
-                        variant={"link"}
-                        color={"black100"}
-                        onClick={onToggle}
-                      >
-                        Sign Up
-                      </Button>
-                    </Link>
-                  </VStack>
-                )}
-              </Box>
-            </SlideFade>
-          </Box>
+            {isAuthenticated ? (
+              <MenuList alignItems={"flex-start"} gap={1}>
+                <Link to={"/changepassword"}>
+                  <MenuItem>
+                    <HStack>
+                      <RiLockPasswordLine /> <Text>Change Password</Text>
+                    </HStack>
+                  </MenuItem>
+                </Link>
+
+                <Link to={"/profile"}>
+                  <MenuItem>
+                    <HStack>
+                      <CgProfile /> <Text>Profile</Text>
+                    </HStack>
+                  </MenuItem>
+                </Link>
+
+                <MenuItem onClick={logoutHandler}>
+                  <HStack>
+                    <BiLogOut /> <Text>Logout</Text>
+                  </HStack>
+                </MenuItem>
+              </MenuList>
+            ) : (
+              <MenuList alignItems={"flex-start"} gap={1}>
+                <Link to="/register">
+                  <MenuItem>
+                    <HStack>
+                      <SiGnuprivacyguard /> <Text>Sign Up</Text>
+                    </HStack>
+                  </MenuItem>
+                </Link>
+
+                <Link to="/login">
+                  <MenuItem>
+                    <HStack>
+                      <BiLogIn /> <Text>Login</Text>
+                    </HStack>
+                  </MenuItem>
+                </Link>
+              </MenuList>
+            )}
+          </Menu>
 
           <IconButton
             color={"black100"}

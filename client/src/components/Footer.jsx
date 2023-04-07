@@ -27,12 +27,10 @@ const Footer = () => {
             <HStack>
               <Input
                 color={"white"}
-                focusBorderColor="#8D72E1"
+                focusBorderColor="primary.dark"
                 placeholder="Email address"
               />
               <Button
-                textTransform={"uppercase"}
-                fontWeight={"bold"}
                 color={"white"}
                 bg={"primary.dark"}
                 _hover={{ bg: "secondary.dark", color: "white" }}
