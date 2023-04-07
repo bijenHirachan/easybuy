@@ -4,6 +4,7 @@ import {
   Container,
   HStack,
   Heading,
+  IconButton,
   Input,
   Stack,
   VStack,
@@ -31,10 +32,10 @@ const Footer = () => {
               />
               <Button
                 textTransform={"uppercase"}
-                bg="#8D72E1"
-                color={"white"}
                 fontWeight={"bold"}
-                _hover={{ bg: "#6f47e4" }}
+                color={"white"}
+                bg={"primary.dark"}
+                _hover={{ bg: "secondary.dark", color: "white" }}
               >
                 Send
               </Button>
@@ -45,24 +46,24 @@ const Footer = () => {
               Follow us on our socials
             </Heading>
             <HStack>
-              <Button
+              <IconButton
                 variant={"link"}
-                _hover={{ color: "#8D72E1" }}
-                leftIcon={<AiOutlineFacebook />}
+                _hover={{ color: "primary.light" }}
+                icon={<AiOutlineFacebook />}
                 fontSize={32}
                 color={"white"}
               />
-              <Button
+              <IconButton
                 variant={"link"}
-                _hover={{ color: "#8D72E1" }}
-                leftIcon={<AiOutlineInstagram />}
+                _hover={{ color: "primary.light" }}
+                icon={<AiOutlineInstagram />}
                 fontSize={32}
                 color={"white"}
               />
-              <Button
+              <IconButton
                 variant={"link"}
-                _hover={{ color: "#8D72E1" }}
-                leftIcon={<AiOutlineTwitter />}
+                _hover={{ color: "primary.light" }}
+                icon={<AiOutlineTwitter />}
                 fontSize={32}
                 color={"white"}
               />
