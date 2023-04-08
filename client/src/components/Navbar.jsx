@@ -19,7 +19,7 @@ import { Link } from "react-router-dom";
 import { BiLogIn, BiLogOut } from "react-icons/bi";
 import { SiGnuprivacyguard } from "react-icons/si";
 import { RiLockPasswordLine } from "react-icons/ri";
-import { CgProfile } from "react-icons/cg";
+import { CgProfile, CgProductHunt } from "react-icons/cg";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/actions/userActions";
 
@@ -119,7 +119,28 @@ const Navbar = ({ isAuthenticated, user }) => {
       </HStack>
       <Box borderBottom={"1px solid #dbd9e1"} pb={2}>
         <HStack>
-          <Button
+          <Link to={"/dashboard"}>
+            <Button
+              color={"black100"}
+              variant={"outline"}
+              fontSize={"sm"}
+              leftIcon={<CgProductHunt fontSize={16} />}
+            >
+              Dashboard
+            </Button>
+          </Link>
+          <Link to={"/products"}>
+            <Button
+              color={"black100"}
+              variant={"outline"}
+              fontSize={"sm"}
+              leftIcon={<CgProductHunt fontSize={16} />}
+            >
+              Products
+            </Button>
+          </Link>
+
+          {/* <Button
             color={"black100"}
             variant={"outline"}
             fontSize={"sm"}
@@ -134,7 +155,7 @@ const Navbar = ({ isAuthenticated, user }) => {
             rightIcon={<RxCaretDown />}
           >
             Sort
-          </Button>
+          </Button> */}
         </HStack>
       </Box>
     </Box>

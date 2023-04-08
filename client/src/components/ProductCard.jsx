@@ -10,16 +10,16 @@ import {
 import { BsCartPlus } from "react-icons/bs";
 import { Link } from "react-router-dom";
 
-const ProductCard = ({ item }) => {
+const ProductCard = ({ product }) => {
   return (
     <Card border={"1px solid rgba(83, 78, 97, 0.10)"} shadow={0}>
       <CardBody p={8} display={"flex"} justifyContent={"center"}>
-        <Link to={"/products/dfs"}>
+        <Link to={`/products/${product._id}`}>
           <Img
             boxSize={"200px"}
             objectFit={"contain"}
-            src={item.poster.url}
-            alt={item.name}
+            src={product.poster.url}
+            alt={product.title}
           />
         </Link>
       </CardBody>
@@ -30,10 +30,10 @@ const ProductCard = ({ item }) => {
         alignItems={"center"}
       >
         <Heading as="h3" size={"md"} textAlign={"center"} color={"black100"}>
-          {item.name}
+          {product.name}
         </Heading>
         <Text my={4} fontSize={"lg"} color={"black75"}>
-          € {item.price}
+          € {product.price}
         </Text>
         <Button
           color={"black100"}

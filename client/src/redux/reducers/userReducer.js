@@ -1,5 +1,9 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
 
+const getAllUsersRequest = createAction("getAllUsersRequest");
+const getAllUsersSuccess = createAction("getAllUsersSuccess");
+const getAllUsersFail = createAction("getAllUsersFail");
+
 const registerRequest = createAction("registerRequest");
 const registerSuccess = createAction("registerSuccess");
 const registerFail = createAction("registerFail");
@@ -41,6 +45,17 @@ const clearError = createAction("clearError");
 
 export const userReducer = createReducer({}, (builder) => {
   builder
+    .addCase(getAllUsersRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(getAllUsersSuccess, (state, action) => {
+      state.loading = false;
+      state.users = action.payload;
+    })
+    .addCase(getAllUsersFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
     .addCase(resetPasswordRequest, (state) => {
       state.loading = true;
     })
@@ -142,6 +157,45 @@ export const userReducer = createReducer({}, (builder) => {
       state.isAuthenticated = true;
     })
     .addCase(registerFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase(clearError, (state) => {
+      state.error = null;
+    })
+    .addCase(clearMessage, (state) => {
+      state.message = null;
+    });
+});
+
+const updateUserRoleRequest = createAction("updateUserRoleRequest");
+const updateUserRoleSuccess = createAction("updateUserRoleSuccess");
+const updateUserRoleFail = createAction("updateUserRoleFail");
+const deleteUserRequest = createAction("deleteUserRequest");
+const deleteUserSuccess = createAction("deleteUserSuccess");
+const deleteUserFail = createAction("deleteUserFail");
+
+export const adminReducer = createReducer({}, (builder) => {
+  builder
+    .addCase(deleteUserRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(deleteUserSuccess, (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase(deleteUserFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase(updateUserRoleRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(updateUserRoleSuccess, (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase(updateUserRoleFail, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     })

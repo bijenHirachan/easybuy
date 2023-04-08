@@ -14,6 +14,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ChangePassword from "./pages/ChangePassword";
 import Profile from "./pages/Profile";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   const dispatch = useDispatch();
@@ -62,6 +63,12 @@ function App() {
           <Route
             path="/resetpassword/:token"
             element={<ResetPassword isAuthenticated={isAuthenticated} />}
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <Dashboard isAuthenticated={isAuthenticated} user={user} />
+            }
           />
         </Routes>
       </Container>
