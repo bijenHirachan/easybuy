@@ -4,8 +4,13 @@ import {
   Avatar,
   Box,
   IconButton,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
   Table,
   TableContainer,
+  Tabs,
   Tbody,
   Td,
   Th,
@@ -19,30 +24,25 @@ import {
   getAllUsers,
   updateUserRole,
 } from "../redux/actions/userActions";
-import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import UsersTable from "../components/UsersTable";
+import ProductsTable from "../components/ProductsTable";
+import { loadProducts } from "../redux/actions/productActions";
+import CreateProduct from "../components/CreateProduct";
 
 const Dashboard = ({ isAuthenticated, user }) => {
   const navigate = useNavigate();
 
-  const [selectedUser, setSelectedUser] = useState("");
-
-  const { users } = useSelector((state) => state.user);
-
   const { error, message } = useSelector((state) => state.admin);
-
-  const toast = useToast();
 
   const dispatch = useDispatch();
 
-  const handleUpdateUserRole = async (id) => {
-    await dispatch(updateUserRole(id));
-    dispatch(getAllUsers());
-  };
+  const toast = useToast();
 
   useEffect(() => {
     if (!isAuthenticated) navigate("/");
     if (user && user.role !== "admin") navigate("/");
     dispatch(getAllUsers());
+    dispatch(loadProducts());
   }, []);
 
   useEffect(() => {
@@ -62,55 +62,26 @@ const Dashboard = ({ isAuthenticated, user }) => {
     }
   }, [dispatch, error, message]);
 
-  const handleUserDelete = async (id) => {
-    await dispatch(deleteUser(id));
-    dispatch(getAllUsers());
-  };
-
   return (
-    <Box>
-      <TableContainer>
-        <Table>
-          <Thead>
-            <Tr>
-              <Th>Avatar</Th>
-              <Th>Name</Th>
-              <Th>Email</Th>
-              <Th>Role</Th>
-              <Th>Actions</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {users &&
-              users.length > 0 &&
-              users.map((u) => (
-                <Tr key={u._id}>
-                  <Td>
-                    <Avatar size={"sm"} src={u.avatar.url} />
-                  </Td>
-                  <Td>{u.name}</Td>
-                  <Td>{u.email}</Td>
-                  <Td>{u.role}</Td>
-                  <Td>
-                    <IconButton
-                      variant={"link"}
-                      colorScheme="green"
-                      icon={<AiOutlineEdit />}
-                      onClick={() => handleUpdateUserRole(u._id)}
-                    />
-
-                    <IconButton
-                      variant={"link"}
-                      colorScheme="red"
-                      icon={<AiOutlineDelete />}
-                      onClick={() => handleUserDelete(u._id)}
-                    />
-                  </Td>
-                </Tr>
-              ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
+    <Box py={6}>
+      <Tabs variant={"enclosed"} colorScheme="purple">
+        <TabList>
+          <Tab>Users</Tab>
+          <Tab>Products</Tab>
+          <Tab>Create Product</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <UsersTable />
+          </TabPanel>
+          <TabPanel>
+            <ProductsTable />
+          </TabPanel>
+          <TabPanel>
+            <CreateProduct />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </Box>
   );
 };

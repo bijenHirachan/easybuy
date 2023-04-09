@@ -15,6 +15,8 @@ import ResetPassword from "./pages/ResetPassword";
 import ChangePassword from "./pages/ChangePassword";
 import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
+import Cart from "./pages/Cart";
+import PageNotFound from "./pages/PageNotFound";
 
 function App() {
   const dispatch = useDispatch();
@@ -70,6 +72,8 @@ function App() {
               <Dashboard isAuthenticated={isAuthenticated} user={user} />
             }
           />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Container>
       <Footer />
