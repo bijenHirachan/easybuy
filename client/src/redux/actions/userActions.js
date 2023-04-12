@@ -11,7 +11,7 @@ export const register = (formData) => async (dispatch) => {
       withCredentials: true,
       credentials: "include",
     });
-    dispatch({ type: "registerSuccess", payload: data.user });
+    dispatch({ type: "registerSuccess", payload: data });
   } catch (error) {
     dispatch({ type: "registerFail", payload: error.response.data.message });
   }
@@ -40,7 +40,7 @@ export const login = (email, password) => async (dispatch) => {
         credentials: "include",
       }
     );
-    dispatch({ type: "loginSuccess", payload: data.user });
+    dispatch({ type: "loginSuccess", payload: data });
   } catch (error) {
     dispatch({ type: "loginFail", payload: error.response.data.message });
   }
@@ -216,6 +216,27 @@ export const deleteUser = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "deleteUserFail",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const subscribeNewsletter = (email) => async (dispatch) => {
+  try {
+    dispatch({ type: "newsletterRequest" });
+
+    const { data } = await axios.post(`${server}/subscribe`,{email},{
+      headers: {
+        headers:{
+          "Content-Type": "application/json"
+        }
+      }
+    });
+
+    dispatch({ type: "newsletterSuccess", payload: data.message });
+  } catch (error) {
+    dispatch({
+      type: "newsletterFail",
       payload: error.response.data.message,
     });
   }

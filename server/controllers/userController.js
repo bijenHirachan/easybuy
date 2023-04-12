@@ -247,3 +247,18 @@ export const updateProfilePicture = catchAsyncErrors(async (req, res, next) => {
     message: "Profile picture updated successfully",
   });
 });
+
+export const subscribeForNewsletter = catchAsyncErrors(
+  async (req, res, next) => {
+    const { email } = req.body;
+
+    const message = `${email} wants to subscribe the newsletter`;
+
+    await sendEmail("test@test.com", "Newletter Subscription", message);
+
+    return res.status(200).json({
+      success: true,
+      message: "You have been subscribed to our newsletter",
+    });
+  }
+);

@@ -1,7 +1,5 @@
 import {
-  Badge,
   Box,
-  Button,
   Card,
   CardBody,
   CardFooter,
@@ -14,7 +12,8 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { BsCartPlus, BsCartDash } from "react-icons/bs";
-import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
@@ -23,7 +22,7 @@ import {
   updateItemsInWishlist,
 } from "../redux/actions/cartAction";
 
-const ProductCard = ({ product }) => {
+const WishListCard = ({ product }) => {
   const [inCart, setInCart] = useState(false);
   const [inWishlist, setInWishlist] = useState(false);
 
@@ -85,39 +84,31 @@ const ProductCard = ({ product }) => {
 
         <HStack justifyContent={"space-between"} w="full">
           <Box>
-            <Text
-              color={"black100"}
-              my={4}
-              fontSize={"lg"}
-              fontWeight={"semibold"}
-            >
+            <Text my={4} fontSize={"lg"} color={"black75"}>
               € {product.price}
             </Text>
           </Box>
           <HStack>
-            <Tooltip
-              hasArrow
-              label={inWishlist ? "Remove From WishList" : "Add To WishList"}
-              openDelay={500}
-            >
+            <Tooltip hasArrow label="Delete" openDelay={500}>
               <IconButton
                 size={"xs"}
                 fontSize={"xl"}
                 variant={"link"}
                 color={"tertiary.dark"}
-                icon={inWishlist ? <AiFillHeart /> : <AiOutlineHeart />}
+                icon={<RiDeleteBin6Line />}
                 onClick={updateWishlistHandler}
                 _hover={{ transform: "scale(1.2)", transition: "all 0.5s" }}
               />
             </Tooltip>
+
             {inCart ? (
               <Tooltip hasArrow label="Remove From Cart" openDelay={500}>
                 <IconButton
                   size={"xs"}
                   fontSize={"xl"}
                   variant={"link"}
-                  color={"tertiary.dark"}
-                  icon={<BsCartDash color="black100" />}
+                  color="tertiary.dark"
+                  icon={<BsCartDash />}
                   onClick={removeFromCartHandler}
                   _hover={{ transform: "scale(1.2)", transition: "all 0.5s" }}
                 />
@@ -129,7 +120,7 @@ const ProductCard = ({ product }) => {
                   fontSize={"xl"}
                   variant={"link"}
                   color={"tertiary.dark"}
-                  icon={<BsCartPlus color="black100" />}
+                  icon={<BsCartPlus />}
                   onClick={addToCartHandler}
                   _hover={{ transform: "scale(1.2)", transition: "all 0.5s" }}
                 />
@@ -142,4 +133,4 @@ const ProductCard = ({ product }) => {
   );
 };
 
-export default ProductCard;
+export default WishListCard;

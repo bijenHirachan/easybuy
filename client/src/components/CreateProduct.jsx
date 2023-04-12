@@ -7,6 +7,7 @@ import {
   HStack,
   Image,
   Input,
+  Select,
   Textarea,
   VStack,
   useToast,
@@ -15,6 +16,7 @@ import { fileUploadCSS } from "../pages/Register";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createProduct, loadProducts } from "../redux/actions/productActions";
+import { getAllCategories } from "../redux/actions/categoryAction";
 
 const fileUploadStyle = {
   "&::file-selector-button": fileUploadCSS,
@@ -27,12 +29,15 @@ const CreateProduct = () => {
   const [inStock, setInStock] = useState("");
   const [image, setImage] = useState("");
   const [imagePreview, setImagePreview] = useState("");
+  const [category, setCategory] = useState("");
 
   const dispatch = useDispatch();
 
   const toast = useToast();
 
-  const { error, message } = useSelector((state) => state.product);
+  const { error, message, loading } = useSelector((state) => state.product);
+
+  const { categories } = useSelector((state) => state.category);
 
   const imageChangeHandler = (e) => {
     const file = e.target.files[0];
@@ -55,6 +60,7 @@ const CreateProduct = () => {
     myForm.append("price", price);
     myForm.append("inStock", inStock);
     myForm.append("file", image);
+    myForm.append("category", category);
 
     await dispatch(createProduct(myForm));
     dispatch(loadProducts());
@@ -79,14 +85,19 @@ const CreateProduct = () => {
       setInStock("");
       setImage("");
       setImagePreview("");
+      setCategory("");
       dispatch({ type: "clearMessage" });
     }
   }, [error, message]);
 
+  useEffect(() => {
+    dispatch(getAllCategories());
+  }, []);
+
   return (
     <HStack my={6} justifyContent={"center"}>
       <form onSubmit={createProductHandler}>
-        <VStack gap={2} w={"400px"}>
+        <VStack gap={2} w={["300px", "400px"]}>
           <FormControl>
             <FormLabel fontSize={"sm"} color={"black100"} htmlFor="title">
               Title
@@ -159,8 +170,31 @@ const CreateProduct = () => {
               onChange={imageChangeHandler}
             />
           </FormControl>
+          <FormControl>
+            <FormLabel fontSize={"sm"} color={"black100"} htmlFor="category">
+              Category
+            </FormLabel>
+            <Select
+              focusBorderColor="primary.light"
+              id="category"
+              type="number"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              color={"black100"}
+            >
+              <option value={""}>None</option>
+              {categories &&
+                categories.length > 0 &&
+                categories.map((cat) => (
+                  <option key={cat._id} value={cat._id}>
+                    {cat.title}
+                  </option>
+                ))}
+            </Select>
+          </FormControl>
         </VStack>
         <Button
+          isLoading={loading}
           type="submit"
           color={"white"}
           bg={"primary.dark"}

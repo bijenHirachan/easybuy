@@ -1,7 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { adminReducer, userReducer } from "./reducers/userReducer";
+import {
+  adminReducer,
+  newsletterReducer,
+  userReducer,
+} from "./reducers/userReducer";
 import { productReducer } from "./reducers/productReducer";
 import { cartReducer } from "./reducers/cartReducer";
+import { categoryReducer } from "./reducers/categoryReducer";
 
 const store = configureStore({
   reducer: {
@@ -9,6 +14,8 @@ const store = configureStore({
     product: productReducer,
     admin: adminReducer,
     cart: cartReducer,
+    category: categoryReducer,
+    newsletter: newsletterReducer,
   },
 });
 

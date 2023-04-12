@@ -114,9 +114,9 @@ const Profile = ({ isAuthenticated, user }) => {
       {user && (
         <Stack direction={["column", "row"]} py={16}>
           <VStack
-            w={"30%"}
+            w={["100%", "30%"]}
             alignItems={"center"}
-            borderRight={"1px solid rgba(83, 78, 97, 0.50)"}
+            borderRight={["none", "1px solid rgba(83, 78, 97, 0.50)"]}
             gap={6}
           >
             <Avatar src={user.avatar.url} size={"2xl"} />
@@ -162,7 +162,7 @@ const Profile = ({ isAuthenticated, user }) => {
               </ModalContent>
             </Modal>
           </VStack>
-          <Box w={"70%"}>
+          <Box w={["100%", "70%"]} py={[6, 0]}>
             <form onSubmit={handleUpdateProfile}>
               <VStack alignItems={"flex-start"} py={6} px={16}>
                 <Editable defaultValue={user.name}>

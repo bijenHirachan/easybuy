@@ -116,7 +116,8 @@ export const userReducer = createReducer({}, (builder) => {
     })
     .addCase(loginSuccess, (state, action) => {
       state.loading = false;
-      state.user = action.payload;
+      state.user = action.payload.user;
+      state.message = action.payload.message;
       state.isAuthenticated = true;
     })
     .addCase(loginFail, (state, action) => {
@@ -153,7 +154,8 @@ export const userReducer = createReducer({}, (builder) => {
     })
     .addCase(registerSuccess, (state, action) => {
       state.loading = false;
-      state.user = action.payload;
+      state.user = action.payload.user;
+      state.message = action.payload.message;
       state.isAuthenticated = true;
     })
     .addCase(registerFail, (state, action) => {
@@ -196,6 +198,31 @@ export const adminReducer = createReducer({}, (builder) => {
       state.message = action.payload;
     })
     .addCase(updateUserRoleFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase(clearError, (state) => {
+      state.error = null;
+    })
+    .addCase(clearMessage, (state) => {
+      state.message = null;
+    });
+});
+
+const newsletterRequest = createAction("newsletterRequest");
+const newsletterSuccess = createAction("newsletterSuccess");
+const newsletterFail = createAction("newsletterFail");
+
+export const newsletterReducer = createReducer({}, (builder) => {
+  builder
+    .addCase(newsletterRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(newsletterSuccess, (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase(newsletterFail, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     })

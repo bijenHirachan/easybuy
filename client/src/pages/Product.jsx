@@ -37,20 +37,92 @@ const Product = () => {
   }, [dispatch, params.id]);
 
   return (
+    // <>
+    //   {product && (
+    //     <Stack my={16} w={"100%"} flexDirection={["column", "row"]}>
+    //       <Box w={"50%"} p={8} display={"flex"} justifyContent={"center"}>
+    //         <Img src={product.poster.url} alt={product.name} />
+    //       </Box>
+    //       <Box w={"50%"} p={8}>
+    //         <Heading color={"black100"}>{product.name}</Heading>
+    //         <Text my={4} fontSize={"2xl"} color={"secondary.light"}>
+    //           € {product.price}
+    //         </Text>
+    //         <Text>{product.description}</Text>
+
+    //         <HStack my={8}>
+    //           <HStack>
+    //             <IconButton
+    //               onClick={() => {
+    //                 if (quantity > 1) setQuantity(quantity - 1);
+    //                 else {
+    //                   toast({
+    //                     description: "You can't select less than 1 product",
+    //                     status: "info",
+    //                   });
+    //                 }
+    //               }}
+    //               icon={<AiOutlineMinus />}
+    //             />
+    //             <Heading color={"black100"} size={"md"}>
+    //               {quantity}
+    //             </Heading>
+    //             <IconButton
+    //               onClick={() => {
+    //                 if (quantity < product.inStock) setQuantity(quantity + 1);
+    //                 else {
+    //                   toast({
+    //                     description: `Only ${product.inStock} items are available`,
+    //                     status: "info",
+    //                   });
+    //                 }
+    //               }}
+    //               icon={<AiOutlinePlus />}
+    //             />
+    //           </HStack>
+    //           <Button
+    //             color={"black100"}
+    //             leftIcon={<BsCartPlus color="black100" />}
+    //             onClick={() => addToCartHandler(product)}
+    //           >
+    //             Add to cart
+    //           </Button>
+    //         </HStack>
+    //       </Box>
+    //     </Stack>
+    //   )}
+    // </>
     <>
       {product && (
         <Stack my={16} w={"100%"} flexDirection={["column", "row"]}>
-          <Box w={"50%"} p={8} display={"flex"} justifyContent={"center"}>
-            <Img src={product.poster.url} alt={product.name} />
+          <Box
+            w={["100%", "50%"]}
+            p={8}
+            display={"flex"}
+            justifyContent={"center"}
+          >
+            <Img
+              src={product.poster.url}
+              alt={product.name}
+              boxSize={["200px", "300px"]}
+              objectFit={"contain"}
+            />
           </Box>
-          <Box w={"50%"} p={8}>
-            <Heading color={"black100"}>{product.name}</Heading>
-            <Text my={4} fontSize={"2xl"} color={"secondary.light"}>
+          <Box w={["100%", "50%"]} p={8}>
+            <Heading textAlign={["center", "left"]} color={"black100"}>
+              {product.title}
+            </Heading>
+            <Text
+              textAlign={["center", "left"]}
+              my={4}
+              fontSize={"2xl"}
+              color={"tertiary.dark"}
+            >
               € {product.price}
             </Text>
-            <Text>{product.description}</Text>
+            <Text textAlign={["center", "left"]}>{product.description}</Text>
 
-            <HStack my={8}>
+            <HStack my={16} justifyContent={["center", "flex-start"]}>
               <HStack>
                 <IconButton
                   onClick={() => {

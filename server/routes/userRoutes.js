@@ -9,6 +9,7 @@ import {
   logout,
   register,
   resetPassword,
+  subscribeForNewsletter,
   updateProfile,
   updateProfilePicture,
   updateUserRole,
@@ -36,5 +37,7 @@ router
   .route("/users/:id")
   .put(isAuthenticated, authorizeAdmin, updateUserRole)
   .delete(isAuthenticated, authorizeAdmin, deleteUser);
+
+router.route("/subscribe").post(subscribeForNewsletter);
 
 export default router;

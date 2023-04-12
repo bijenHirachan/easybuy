@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/actions/userActions";
@@ -17,11 +10,9 @@ const Login = ({ isAuthenticated }) => {
 
   const dispatch = useDispatch();
 
-  const { error, message } = useSelector((state) => state.user);
-
   const navigate = useNavigate();
 
-  const toast = useToast();
+  const { message, loading } = useSelector((state) => state.user);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -33,22 +24,10 @@ const Login = ({ isAuthenticated }) => {
   }, [isAuthenticated]);
 
   useEffect(() => {
-    if (error) {
-      toast({
-        description: error,
-        status: "error",
-      });
-    }
     if (message) {
-      toast({
-        description: message,
-        status: "success",
-      });
-      setEmail("");
-      setPassword("");
-      navigate("/");
+      navigate("/profile");
     }
-  }, [dispatch, error, message]);
+  }, [message]);
 
   return (
     <Box marginTop={"48px"}>
@@ -93,6 +72,7 @@ const Login = ({ isAuthenticated }) => {
 
           <FormControl my={8}>
             <Button
+              isLoading={loading}
               type="submit"
               color={"white"}
               bg={"primary.dark"}

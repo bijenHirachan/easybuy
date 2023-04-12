@@ -50,7 +50,7 @@ const ForgotPassword = () => {
         p={16}
         gap={6}
       >
-        <FormControl width={"30%"}>
+        <FormControl width={["100%", "30%"]}>
           <FormLabel color={"black100"} fontSize={"sm"} htmlFor="email">
             Email
           </FormLabel>
@@ -61,7 +61,7 @@ const ForgotPassword = () => {
           />
         </FormControl>
         <Button
-          w={"30%"}
+          w={["100%", "30%"]}
           type="submit"
           color={"white"}
           bg={"primary.dark"}

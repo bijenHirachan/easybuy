@@ -2,7 +2,10 @@ import express from "express";
 import {
   createProduct,
   deleteProduct,
+  featuredProducts,
   getAllProducts,
+  getSingleProduct,
+  searchProducts,
   updateProduct,
 } from "../controllers/productController.js";
 import { isAuthenticated, authorizeAdmin } from "../middlewares/auth.js";
@@ -17,7 +20,11 @@ router
 
 router
   .route("/products/:id")
+  .get(getSingleProduct)
   .put(isAuthenticated, authorizeAdmin, updateProduct)
   .delete(isAuthenticated, authorizeAdmin, deleteProduct);
 
+router.route("/featured-products").get(featuredProducts);
+
+router.route("/search-products").get(searchProducts);
 export default router;

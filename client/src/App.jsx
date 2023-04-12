@@ -1,7 +1,7 @@
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
 import Navbar from "./components/Navbar";
-import { Container } from "@chakra-ui/react";
+import { Container, useToast } from "@chakra-ui/react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Products from "./pages/Products";
 import Product from "./pages/Product";
@@ -17,6 +17,8 @@ import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
 import Cart from "./pages/Cart";
 import PageNotFound from "./pages/PageNotFound";
+import { getFeaturedProducts } from "./redux/actions/productActions";
+import WishList from "./pages/WishList";
 
 function App() {
   const dispatch = useDispatch();
@@ -25,13 +27,28 @@ function App() {
     (state) => state.user
   );
 
+  const toast = useToast();
+
   useEffect(() => {
     dispatch(loadUser());
+    dispatch(getFeaturedProducts());
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch({ type: "clearError" });
-    dispatch({ type: "clearMessage" });
+    if (error) {
+      toast({
+        description: error,
+        status: "error",
+      });
+      dispatch({ type: "clearError" });
+    }
+    if (message) {
+      toast({
+        description: message,
+        status: "success",
+      });
+      dispatch({ type: "clearMessage" });
+    }
   }, [dispatch, error, message]);
 
   return (
@@ -73,6 +90,7 @@ function App() {
             }
           />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/wishlist" element={<WishList />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Container>

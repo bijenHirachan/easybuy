@@ -1,8 +1,20 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
 
+const searchProductsRequest = createAction("searchProductsRequest");
+const searchProductsSuccess = createAction("searchProductsSuccess");
+const searchProductsFail = createAction("searchProductsFail");
+
+const getCategoryProductsRequest = createAction("getCategoryProductsRequest");
+const getCategoryProductsSuccess = createAction("getCategoryProductsSuccess");
+const getCategoryProductsFail = createAction("getCategoryProductsFail");
+
 const loadProductsRequest = createAction("loadProductsRequest");
 const loadProductsSuccess = createAction("loadProductsSuccess");
 const loadProductsFail = createAction("loadProductsFail");
+
+const featuredProductsRequest = createAction("featuredProductsRequest");
+const featuredProductsSuccess = createAction("featuredProductsSuccess");
+const featuredProductsFail = createAction("featuredProductsFail");
 
 const getSingleProductRequest = createAction("getSingleProductRequest");
 const getSingleProductSuccess = createAction("getSingleProductSuccess");
@@ -12,11 +24,42 @@ const createProductRequest = createAction("createProductRequest");
 const createProductSuccess = createAction("createProductSuccess");
 const createProductFail = createAction("createProductFail");
 
+const updateProductRequest = createAction("updateProductRequest");
+const updateProductSuccess = createAction("updateProductSuccess");
+const updateProductFail = createAction("updateProductFail");
+
+const deleteProductRequest = createAction("deleteProductRequest");
+const deleteProductSuccess = createAction("deleteProductSuccess");
+const deleteProductFail = createAction("deleteProductFail");
+
 const clearMessage = createAction("clearMessage");
 const clearError = createAction("clearError");
+const clearSearchProducts = createAction("clearSearchProducts");
 
 export const productReducer = createReducer({}, (builder) => {
   builder
+    .addCase(getCategoryProductsRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(getCategoryProductsSuccess, (state, action) => {
+      state.loading = false;
+      state.products = action.payload;
+    })
+    .addCase(getCategoryProductsFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase(searchProductsRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(searchProductsSuccess, (state, action) => {
+      state.loading = false;
+      state.searchProducts = action.payload;
+    })
+    .addCase(searchProductsFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
     .addCase(getSingleProductRequest, (state) => {
       state.loading = true;
     })
@@ -39,6 +82,39 @@ export const productReducer = createReducer({}, (builder) => {
       state.loading = false;
       state.error = action.payload;
     })
+    .addCase(updateProductRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(updateProductSuccess, (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase(updateProductFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase(deleteProductRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(deleteProductSuccess, (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase(deleteProductFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase(featuredProductsRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(featuredProductsSuccess, (state, action) => {
+      state.loading = false;
+      state.featuredProducts = action.payload;
+    })
+    .addCase(featuredProductsFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
     .addCase(loadProductsRequest, (state) => {
       state.loading = true;
     })
@@ -55,5 +131,8 @@ export const productReducer = createReducer({}, (builder) => {
     })
     .addCase(clearMessage, (state) => {
       state.message = null;
+    })
+    .addCase(clearSearchProducts, (state) => {
+      state.searchProducts = null;
     });
 });

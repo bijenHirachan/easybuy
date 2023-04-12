@@ -5,7 +5,6 @@ import {
   FormControl,
   FormLabel,
   Input,
-  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -35,11 +34,9 @@ const Register = ({ isAuthenticated }) => {
 
   const dispatch = useDispatch();
 
-  const toast = useToast();
-
-  const { error, message } = useSelector((state) => state.user);
-
   const navigate = useNavigate();
+
+  const { loading, message } = useSelector((state) => state.user);
 
   const changeImageHandler = (e) => {
     const file = e.target.files[0];
@@ -70,20 +67,10 @@ const Register = ({ isAuthenticated }) => {
   }, [isAuthenticated]);
 
   useEffect(() => {
-    if (error) {
-      toast({
-        description: error,
-        status: "error",
-      });
-    }
     if (message) {
-      toast({
-        description: message,
-        status: "success",
-      });
-      navigate("/login");
+      navigate("/profile");
     }
-  }, [dispatch, error, message]);
+  }, [message]);
 
   return (
     <Box marginTop={"48px"}>
@@ -150,6 +137,7 @@ const Register = ({ isAuthenticated }) => {
 
           <FormControl my={8}>
             <Button
+              isLoading={loading}
               type="submit"
               color={"white"}
               bg={"primary.dark"}

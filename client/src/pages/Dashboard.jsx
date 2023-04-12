@@ -28,6 +28,8 @@ import UsersTable from "../components/UsersTable";
 import ProductsTable from "../components/ProductsTable";
 import { loadProducts } from "../redux/actions/productActions";
 import CreateProduct from "../components/CreateProduct";
+import CategoriesTable from "../components/CategoriesTable";
+import CreateCategory from "../components/CreateCategory";
 
 const Dashboard = ({ isAuthenticated, user }) => {
   const navigate = useNavigate();
@@ -69,6 +71,8 @@ const Dashboard = ({ isAuthenticated, user }) => {
           <Tab>Users</Tab>
           <Tab>Products</Tab>
           <Tab>Create Product</Tab>
+          <Tab>Categories</Tab>
+          <Tab>Create Category</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -79,6 +83,12 @@ const Dashboard = ({ isAuthenticated, user }) => {
           </TabPanel>
           <TabPanel>
             <CreateProduct />
+          </TabPanel>
+          <TabPanel>
+            <CategoriesTable />
+          </TabPanel>
+          <TabPanel>
+            <CreateCategory />
           </TabPanel>
         </TabPanels>
       </Tabs>

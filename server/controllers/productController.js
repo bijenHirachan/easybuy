@@ -1,4 +1,5 @@
 import catchAsyncErrors from "../middlewares/catchAsyncErrors.js";
+import { Category } from "../models/Category.js";
 import { Product } from "../models/Product.js";
 import ErrorHandler from "../utils/ErrorHandler.js";
 import getDataUri from "../utils/dataUri.js";
@@ -13,8 +14,25 @@ export const getAllProducts = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+export const searchProducts = catchAsyncErrors(async (req, res, next) => {
+  const { search } = req.query;
+
+  if (!search) return next(new ErrorHandler("Search is required", 404));
+  const products = await Product.find({
+    title: {
+      $regex: search,
+      $options: "i",
+    },
+  });
+
+  res.status(200).json({
+    success: true,
+    products,
+  });
+});
+
 export const createProduct = catchAsyncErrors(async (req, res, next) => {
-  const { title, description, price, inStock } = req.body;
+  const { title, description, price, inStock, category } = req.body;
 
   const file = req.file;
 
@@ -27,6 +45,8 @@ export const createProduct = catchAsyncErrors(async (req, res, next) => {
     folder: "/easybuy/products",
   });
 
+  const selectedCategory = await Category.findById(category);
+
   const product = await Product.create({
     title,
     description,
@@ -36,9 +56,27 @@ export const createProduct = catchAsyncErrors(async (req, res, next) => {
       public_id: myCloud.public_id,
       url: myCloud.secure_url,
     },
+    category,
   });
 
+  selectedCategory.products.push(product);
+
+  await selectedCategory.save();
+
   res.status(201).json({
+    success: true,
+    message: "Product created successfully",
+  });
+});
+
+export const getSingleProduct = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+
+  const product = await Product.findById(id);
+
+  if (!product) return next(new ErrorHandler("Product Not Found", 404));
+
+  return res.status(200).json({
     success: true,
     product,
   });
@@ -46,7 +84,7 @@ export const createProduct = catchAsyncErrors(async (req, res, next) => {
 
 export const updateProduct = catchAsyncErrors(async (req, res, next) => {
   const { id } = req.params;
-  const { title, description, price, inStock } = req.body;
+  const { title, description, price, inStock, category } = req.body;
 
   const product = await Product.findById(id);
 
@@ -56,6 +94,11 @@ export const updateProduct = catchAsyncErrors(async (req, res, next) => {
   if (description) product.description = description;
   if (price) product.price = price;
   if (inStock) product.inStock = inStock;
+  if (category) {
+    const selectedCategory = await Category.findById(category);
+    selectedCategory.products.push(product);
+    await selectedCategory.save();
+  }
 
   await product.save();
 
@@ -81,5 +124,13 @@ export const deleteProduct = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: "Product deleted successfully",
+  });
+});
+
+export const featuredProducts = catchAsyncErrors(async (req, res, next) => {
+  const featuredProducts = await Product.find().limit(4);
+  return res.status(200).json({
+    success: true,
+    featuredProducts,
   });
 });

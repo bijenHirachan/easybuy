@@ -3,6 +3,7 @@ import { config } from "dotenv";
 import cors from "cors";
 import userRoutes from "./routes/userRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
 import ErrorMiddleware from "./middlewares/ErrorMiddleware.js";
 import cookieParser from "cookie-parser";
 
@@ -24,6 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1", userRoutes);
 app.use("/api/v1", productRoutes);
+app.use("/api/v1", categoryRoutes);
 
 export default app;
 

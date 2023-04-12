@@ -38,6 +38,50 @@ export const createProduct = (formData) => async (dispatch) => {
   }
 };
 
+export const updateProduct =
+  (id, title, description, price, inStock, category) => async (dispatch) => {
+    try {
+      dispatch({ type: "updateProductRequest" });
+      const { data } = await axios.put(
+        `${server}/products/${id}`,
+        {
+          title,
+          description,
+          price,
+          inStock,
+          category,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      dispatch({ type: "updateProductSuccess", payload: data.message });
+    } catch (error) {
+      dispatch({
+        type: "updateProductFail",
+        payload: error.response.data.message,
+      });
+    }
+  };
+
+export const deleteProduct = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: "deleteProductRequest" });
+    const { data } = await axios.delete(`${server}/products/${id}`, {
+      withCredentials: true,
+    });
+    dispatch({ type: "deleteProductSuccess", payload: data.message });
+  } catch (error) {
+    dispatch({
+      type: "deleteProductFail",
+      payload: error.response.data.message,
+    });
+  }
+};
+
 export const getSingleProduct = (id) => async (dispatch) => {
   try {
     dispatch({ type: "getSingleProductRequest" });
@@ -48,6 +92,64 @@ export const getSingleProduct = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "getSingleProductFail",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const getFeaturedProducts = () => async (dispatch) => {
+  try {
+    dispatch({ type: "featuredProductsRequest" });
+
+    const { data } = await axios.get(`${server}/featured-products`);
+
+    dispatch({
+      type: "featuredProductsSuccess",
+      payload: data.featuredProducts,
+    });
+  } catch (error) {
+    dispatch({
+      type: "featuredProductsFail",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const getSearchProducts = (search) => async (dispatch) => {
+  try {
+    dispatch({ type: "searchProductsRequest" });
+
+    const { data } = await axios.get(
+      `${server}/search-products?search=${search}`
+    );
+
+    dispatch({
+      type: "searchProductsSuccess",
+      payload: data.products,
+    });
+  } catch (error) {
+    dispatch({
+      type: "searchProductsFail",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const getCategoryProducts = (category) => async (dispatch) => {
+  try {
+    dispatch({ type: "getCategoryProductsRequest" });
+
+    const { data } = await axios.get(
+      `${server}/products-categories/${category}`
+    );
+
+    dispatch({
+      type: "getCategoryProductsSuccess",
+      payload: data.products,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getCategoryProductsFail",
       payload: error.response.data.message,
     });
   }
