@@ -21,7 +21,7 @@ import {
   addToCart,
   removeFromCart,
   updateItemsInWishlist,
-} from "../redux/actions/cartAction";
+} from "../redux/actions/cartActions";
 
 const ProductCard = ({ product }) => {
   const [inCart, setInCart] = useState(false);

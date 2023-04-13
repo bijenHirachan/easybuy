@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   createCategory,
   getAllCategories,
-} from "../redux/actions/categoryAction";
+} from "../redux/actions/categoryActions";
 
 const CreateCategory = () => {
   const [title, setTitle] = useState("");

@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
 import { BsCartPlus } from "react-icons/bs";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../redux/actions/cartAction";
+import { addToCart } from "../redux/actions/cartActions";
 import { useParams } from "react-router-dom";
 import { getSingleProduct } from "../redux/actions/productActions";
 

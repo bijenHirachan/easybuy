@@ -5,9 +5,13 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
+  Badge,
+  Box,
   Button,
   FormControl,
   FormLabel,
+  HStack,
+  Heading,
   IconButton,
   Image,
   Input,
@@ -23,6 +27,7 @@ import {
   Tbody,
   Td,
   Textarea,
+  Tfoot,
   Th,
   Thead,
   Tr,
@@ -35,7 +40,7 @@ import {
   loadProducts,
   updateProduct,
 } from "../redux/actions/productActions";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 const ProductsTable = () => {
@@ -46,7 +51,9 @@ const ProductsTable = () => {
   const [inStock, setInStock] = useState("");
   const [category, setCategory] = useState("");
 
-  const { products, loading, error, message } = useSelector(
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const { products, loading, error, message, totalPages } = useSelector(
     (state) => state.product
   );
 
@@ -86,16 +93,32 @@ const ProductsTable = () => {
     await dispatch(
       updateProduct(id, title, description, price, inStock, category)
     );
-    await dispatch(loadProducts());
+    await dispatch(loadProducts(currentPage));
     onClose();
   };
 
   const submitDeleteProductHandler = async () => {
     await dispatch(deleteProduct(id));
-    await dispatch(loadProducts());
+    await dispatch(loadProducts(currentPage));
 
     onDeleteClose();
   };
+
+  const nextPageHandler = async () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPageHandler = async () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  useEffect(() => {
+    dispatch(loadProducts(currentPage));
+  }, [currentPage]);
 
   return (
     <>
@@ -221,6 +244,26 @@ const ProductsTable = () => {
           </form>
         </ModalContent>
       </Modal>
+      <HStack my={3} justifyContent={"flex-end"}>
+        <Badge
+          size={"xs"}
+          py={1}
+          px={2}
+          bg={"tertiary.light"}
+          color={"tertiary.dark"}
+        >
+          Current Page : {currentPage + 1}
+        </Badge>
+        <Badge
+          size={"xs"}
+          py={1}
+          px={2}
+          bg={"tertiary.light"}
+          color={"tertiary.dark"}
+        >
+          Total Pages: {totalPages}
+        </Badge>
+      </HStack>
       <TableContainer>
         <Table>
           <Thead>
@@ -270,6 +313,32 @@ const ProductsTable = () => {
                 </Tr>
               ))}
           </Tbody>
+          <Tfoot>
+            <Tr>
+              <Th colSpan={6}>
+                <HStack justifyContent={"space-between"}>
+                  <Button
+                    onClick={prevPageHandler}
+                    variant={"outline"}
+                    rounded={0}
+                    size={"xs"}
+                    isDisabled={currentPage === 0}
+                  >
+                    Prev
+                  </Button>
+                  <Button
+                    onClick={nextPageHandler}
+                    variant={"outline"}
+                    rounded={0}
+                    size={"xs"}
+                    isDisabled={currentPage === totalPages - 1}
+                  >
+                    Next
+                  </Button>
+                </HStack>
+              </Th>
+            </Tr>
+          </Tfoot>
         </Table>
       </TableContainer>
     </>

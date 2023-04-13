@@ -4,10 +4,19 @@ import { Product } from "../models/Product.js";
 import ErrorHandler from "../utils/ErrorHandler.js";
 
 export const getAllCategories = catchAsyncErrors(async (req, res, next) => {
-  const categories = await Category.find();
+  const page = parseInt(req.query.page || 0);
+
+  const PAGE_SIZE = 6;
+
+  const total = await Category.countDocuments();
+
+  const categories = await Category.find()
+    .limit(PAGE_SIZE)
+    .skip(PAGE_SIZE * page);
 
   return res.status(200).json({
     success: true,
+    totalPages: Math.ceil(total / PAGE_SIZE),
     categories,
   });
 });
@@ -70,10 +79,21 @@ export const deleteCategory = catchAsyncErrors(async (req, res, next) => {
 export const categoryProducts = catchAsyncErrors(async (req, res, next) => {
   const { id } = req.params;
 
-  const category = await Category.findById(id).populate("products");
+  const page = parseInt(req.query.page || 0);
+
+  const PAGE_SIZE = 6;
+
+  const total = await Product.find({ category: id }).count();
+
+  const products = await Product.find({
+    category: id,
+  })
+    .limit(PAGE_SIZE)
+    .skip(PAGE_SIZE * page);
 
   return res.status(200).json({
     success: true,
-    products: category.products,
+    totalPages: Math.ceil(total / PAGE_SIZE),
+    products,
   });
 });

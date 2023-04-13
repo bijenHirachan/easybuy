@@ -4,6 +4,7 @@ export const addItem = createAction("addItem");
 export const calculateTotal = createAction("calculateTotal");
 export const removeItem = createAction("removeItem");
 export const updateWishlist = createAction("updateWishlist");
+export const emptyCart = createAction("emptyCart");
 
 export const cartReducer = createReducer(
   {
@@ -42,6 +43,9 @@ export const cartReducer = createReducer(
         } else {
           state.wishlist = [...state.wishlist, item];
         }
+      })
+      .addCase(emptyCart, (state, action) => {
+        state.cartItems = [];
       });
   }
 );

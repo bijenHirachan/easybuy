@@ -1,20 +1,22 @@
 import axios from "axios";
 import { server } from "../store";
 
-export const getAllCategories = () => async (dispatch) => {
-  try {
-    dispatch({ type: "getAllCategoriesRequest" });
+export const getAllCategories =
+  (page = 0) =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: "getAllCategoriesRequest" });
 
-    const { data } = await axios.get(`${server}/categories`);
+      const { data } = await axios.get(`${server}/categories?page=${page}`);
 
-    dispatch({ type: "getAllCategoriesSuccess", payload: data.categories });
-  } catch (error) {
-    dispatch({
-      type: "getAllCategoriesFail",
-      payload: error.response.data.message,
-    });
-  }
-};
+      dispatch({ type: "getAllCategoriesSuccess", payload: data });
+    } catch (error) {
+      dispatch({
+        type: "getAllCategoriesFail",
+        payload: error.response.data.message,
+      });
+    }
+  };
 
 export const createCategory = (title) => async (dispatch) => {
   try {

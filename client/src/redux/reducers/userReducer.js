@@ -50,7 +50,8 @@ export const userReducer = createReducer({}, (builder) => {
     })
     .addCase(getAllUsersSuccess, (state, action) => {
       state.loading = false;
-      state.users = action.payload;
+      state.users = action.payload.users;
+      state.totalPages = action.payload.totalPages;
     })
     .addCase(getAllUsersFail, (state, action) => {
       state.loading = false;

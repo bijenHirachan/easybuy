@@ -19,6 +19,8 @@ import Cart from "./pages/Cart";
 import PageNotFound from "./pages/PageNotFound";
 import { getFeaturedProducts } from "./redux/actions/productActions";
 import WishList from "./pages/WishList";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentCancel from "./pages/PaymentCancel";
 
 function App() {
   const dispatch = useDispatch();
@@ -36,10 +38,12 @@ function App() {
 
   useEffect(() => {
     if (error) {
-      toast({
-        description: error,
-        status: "error",
-      });
+      if (error !== "Not logged in") {
+        toast({
+          description: error,
+          status: "error",
+        });
+      }
       dispatch({ type: "clearError" });
     }
     if (message) {
@@ -91,6 +95,8 @@ function App() {
           />
           <Route path="/cart" element={<Cart />} />
           <Route path="/wishlist" element={<WishList />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-cancel" element={<PaymentCancel />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Container>

@@ -6,10 +6,19 @@ import getDataUri from "../utils/dataUri.js";
 import cloudinary from "cloudinary";
 
 export const getAllProducts = catchAsyncErrors(async (req, res, next) => {
-  const products = await Product.find();
+  const page = parseInt(req.query.page || 0);
+
+  const PAGE_SIZE = 6;
+
+  const total = await Product.countDocuments();
+
+  const products = await Product.find()
+    .limit(PAGE_SIZE)
+    .skip(PAGE_SIZE * page);
 
   res.status(200).json({
     success: true,
+    totalPages: Math.ceil(total / PAGE_SIZE),
     products,
   });
 });
@@ -96,7 +105,15 @@ export const updateProduct = catchAsyncErrors(async (req, res, next) => {
   if (inStock) product.inStock = inStock;
   if (category) {
     const selectedCategory = await Category.findById(category);
-    selectedCategory.products.push(product);
+    if (selectedCategory) {
+      product.category = category;
+    }
+    const productExist = selectedCategory.products.find(
+      (pr) => pr._id.toString() === product._id.toString()
+    );
+    if (!productExist) {
+      selectedCategory.products.push(product);
+    }
     await selectedCategory.save();
   }
 
@@ -124,13 +141,5 @@ export const deleteProduct = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: "Product deleted successfully",
-  });
-});
-
-export const featuredProducts = catchAsyncErrors(async (req, res, next) => {
-  const featuredProducts = await Product.find().limit(4);
-  return res.status(200).json({
-    success: true,
-    featuredProducts,
   });
 });

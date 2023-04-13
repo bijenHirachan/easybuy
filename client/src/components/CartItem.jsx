@@ -9,7 +9,7 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import { addToCart, removeFromCart } from "../redux/actions/cartAction";
+import { addToCart, removeFromCart } from "../redux/actions/cartActions";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useDispatch } from "react-redux";
@@ -53,8 +53,10 @@ const CartItem = ({ item }) => {
     >
       <Image boxSize={"100px"} objectFit={"contain"} src={item.poster.url} />
       <VStack p={4} alignItems={"flex-end"}>
-        <Heading>{item.title}</Heading>
-        <Text>€ {item.price}</Text>
+        <Heading as={"h4"} size={"md"} color={"black100"}>
+          {item.title}
+        </Heading>
+        <Text color={"primary.dark"}>€ {item.price}</Text>
 
         <HStack pt={6}>
           <IconButton

@@ -16,6 +16,22 @@ const featuredProductsRequest = createAction("featuredProductsRequest");
 const featuredProductsSuccess = createAction("featuredProductsSuccess");
 const featuredProductsFail = createAction("featuredProductsFail");
 
+const createFeaturedProductRequest = createAction(
+  "createFeaturedProductRequest"
+);
+const createFeaturedProductSuccess = createAction(
+  "createFeaturedProductSuccess"
+);
+const createFeaturedProductFail = createAction("createFeaturedProductFail");
+
+const deleteFeaturedProductRequest = createAction(
+  "deleteFeaturedProductRequest"
+);
+const deleteFeaturedProductSuccess = createAction(
+  "deleteFeaturedProductSuccess"
+);
+const deleteFeaturedProductFail = createAction("deleteFeaturedProductFail");
+
 const getSingleProductRequest = createAction("getSingleProductRequest");
 const getSingleProductSuccess = createAction("getSingleProductSuccess");
 const getSingleProductFail = createAction("getSingleProductFail");
@@ -43,7 +59,8 @@ export const productReducer = createReducer({}, (builder) => {
     })
     .addCase(getCategoryProductsSuccess, (state, action) => {
       state.loading = false;
-      state.products = action.payload;
+      state.products = action.payload.products;
+      state.totalPages = action.payload.totalPages;
     })
     .addCase(getCategoryProductsFail, (state, action) => {
       state.loading = false;
@@ -115,12 +132,35 @@ export const productReducer = createReducer({}, (builder) => {
       state.loading = false;
       state.error = action.payload;
     })
+    .addCase(createFeaturedProductRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(createFeaturedProductSuccess, (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase(createFeaturedProductFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase(deleteFeaturedProductRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(deleteFeaturedProductSuccess, (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase(deleteFeaturedProductFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
     .addCase(loadProductsRequest, (state) => {
       state.loading = true;
     })
     .addCase(loadProductsSuccess, (state, action) => {
       state.loading = false;
-      state.products = action.payload;
+      state.products = action.payload.products;
+      state.totalPages = action.payload.totalPages;
     })
     .addCase(loadProductsFail, (state, action) => {
       state.loading = false;

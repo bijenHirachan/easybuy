@@ -6,12 +6,22 @@ import { sendEmail } from "../utils/sendEmail.js";
 import crypto from "crypto";
 import getDataUri from "../utils/dataUri.js";
 import cloudinary from "cloudinary";
+import { Subscriber } from "../models/Subscriber.js";
 
 export const getUsers = catchAsyncErrors(async (req, res, next) => {
-  const users = await User.find();
+  const page = parseInt(req.query.page || 0);
+
+  const PAGE_SIZE = 6;
+
+  const total = await User.countDocuments();
+
+  const users = await User.find()
+    .limit(PAGE_SIZE)
+    .skip(PAGE_SIZE * page);
 
   res.status(200).json({
     success: true,
+    totalPages: Math.ceil(total / PAGE_SIZE),
     users,
   });
 });
@@ -252,9 +262,14 @@ export const subscribeForNewsletter = catchAsyncErrors(
   async (req, res, next) => {
     const { email } = req.body;
 
-    const message = `${email} wants to subscribe the newsletter`;
+    if (!email) return next(new ErrorHandler("Email is required", 400));
 
-    await sendEmail("test@test.com", "Newletter Subscription", message);
+    const subscriber = await Subscriber.findOne({ email });
+
+    if (subscriber)
+      return next(new ErrorHandler("You have already been subscribed", 409));
+
+    await Subscriber.create({ email });
 
     return res.status(200).json({
       success: true,

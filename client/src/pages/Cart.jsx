@@ -1,4 +1,6 @@
 import {
+  Box,
+  Button,
   Grid,
   HStack,
   Heading,
@@ -13,15 +15,40 @@ import {
   Thead,
   Tr,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import emptyCart from "../assets/emptyCart.png";
 import CartItem from "../components/CartItem";
+import { MdOutlineShoppingCartCheckout } from "react-icons/md";
+import axios from "axios";
 
 const Cart = () => {
   const { cartItems } = useSelector((state) => state.cart);
+  const { isAuthenticated, user } = useSelector((state) => state.user);
   const [totalPrice, setTotalPrice] = useState(0);
+
+  const toast = useToast();
+
+  const checkoutHandler = async () => {
+    if (isAuthenticated && user) {
+      const { data } = await axios.post(
+        "http://localhost:5000/api/v1/create-checkout-session",
+        {
+          cartItems,
+          totalPrice,
+          user,
+        }
+      );
+      window.location.href = data.url;
+    } else {
+      toast({
+        description: "Please login first to complete the checkout",
+        status: "info",
+      });
+    }
+  };
 
   useEffect(() => {
     let total = 0;
@@ -76,6 +103,18 @@ const Cart = () => {
                 </Tr>
               </Tfoot>
             </Table>
+            <HStack justifyContent={"center"} py={6}>
+              <Button
+                onClick={checkoutHandler}
+                rounded={0}
+                variant={"outline"}
+                color={"black100"}
+                size={"lg"}
+                leftIcon={<MdOutlineShoppingCartCheckout />}
+              >
+                Checkout
+              </Button>
+            </HStack>
           </TableContainer>
         </Grid>
       ) : (

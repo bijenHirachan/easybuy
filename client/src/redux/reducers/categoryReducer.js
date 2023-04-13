@@ -59,7 +59,8 @@ export const categoryReducer = createReducer({}, (builder) => {
     })
     .addCase(getAllCategoriesSuccess, (state, action) => {
       state.loading = false;
-      state.categories = action.payload;
+      state.categories = action.payload.categories;
+      state.totalPages = action.payload.totalPages;
     })
     .addCase(getAllCategoriesFail, (state, action) => {
       state.loading = false;

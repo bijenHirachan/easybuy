@@ -11,23 +11,18 @@ import {
   MenuList,
   MenuItem,
   Text,
-  Badge,
-  InputGroup,
-  InputLeftElement,
   Modal,
   ModalOverlay,
   ModalContent,
   ModalCloseButton,
   ModalBody,
   useDisclosure,
-  Stack,
 } from "@chakra-ui/react";
 import {
   AiOutlineHeart,
   AiOutlineShoppingCart,
   AiOutlineUser,
 } from "react-icons/ai";
-import { RxCaretDown } from "react-icons/rx";
 import logo from "../assets/logo.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { BiLogIn, BiLogOut } from "react-icons/bi";
@@ -39,7 +34,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/actions/userActions";
 import { useEffect, useState } from "react";
 import Search from "./Search";
-import { MdOutlinePerson } from "react-icons/md";
 
 const Navbar = ({ isAuthenticated, user }) => {
   const dispatch = useDispatch();
@@ -479,23 +473,6 @@ const Navbar = ({ isAuthenticated, user }) => {
                 Products
               </Button>
             </Link>
-
-            {/* <Button
-            color={"black100"}
-            variant={"outline"}
-            fontSize={"sm"}
-            rightIcon={<RxCaretDown />}
-          >
-            Categories
-          </Button>
-          <Button
-            color={"black100"}
-            variant={"outline"}
-            fontSize={"sm"}
-            rightIcon={<RxCaretDown />}
-          >
-            Sort
-          </Button> */}
           </HStack>
         </Box>
       </Box>

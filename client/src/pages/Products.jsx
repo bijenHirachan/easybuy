@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Button,
   HStack,
@@ -8,32 +9,69 @@ import {
   MenuItem,
   MenuList,
   SimpleGrid,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getCategoryProducts,
   loadProducts,
 } from "../redux/actions/productActions";
-import { getAllCategories } from "../redux/actions/categoryAction";
+import { getAllCategories } from "../redux/actions/categoryActions";
 import { BiCategory } from "react-icons/bi";
 
 const Products = () => {
-  const { error, message, products } = useSelector((state) => state.product);
+  const { error, message, products, totalPages } = useSelector(
+    (state) => state.product
+  );
+
+  const [allCategories, setAllCategories] = useState(true);
+
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(0);
 
   const { categories } = useSelector((state) => state.category);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadProducts());
+    dispatch(loadProducts(currentPage));
     dispatch(getAllCategories());
   }, []);
 
-  const getCategoryProductsHandler = async (category) => {
-    dispatch(getCategoryProducts(category));
+  const prevPageHandler = async () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
   };
+
+  const nextPageHandler = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const allCategoryHandler = () => {
+    setAllCategories(true);
+    dispatch(loadProducts(currentPage));
+  };
+
+  const getCategoryProductsHandler = async (category) => {
+    setAllCategories(false);
+    setSelectedCategory(category);
+    dispatch(getCategoryProducts(category, currentPage));
+  };
+
+  useEffect(() => {
+    if (allCategories) {
+      dispatch(loadProducts(currentPage));
+    } else {
+      dispatch(getCategoryProducts(selectedCategory, currentPage));
+    }
+  }, [currentPage]);
 
   return (
     <Box>
@@ -41,12 +79,13 @@ const Products = () => {
         <Heading my={8} color={"black100"}>
           Products
         </Heading>
+
         <Menu>
           <MenuButton as={Button} rightIcon={<BiCategory />}>
             Categories
           </MenuButton>
           <MenuList>
-            <MenuItem onClick={() => dispatch(loadProducts())}>All</MenuItem>
+            <MenuItem onClick={allCategoryHandler}>All</MenuItem>
             {categories &&
               categories.length > 0 &&
               categories.map((cat) => (
@@ -71,6 +110,24 @@ const Products = () => {
             <ProductCard key={product._id} product={product} />
           ))}
       </SimpleGrid>
+      <HStack py={4} justifyContent={"space-between"}>
+        <Button
+          variant={"outline"}
+          size={"sm"}
+          onClick={prevPageHandler}
+          isDisabled={currentPage === 0}
+        >
+          Prev
+        </Button>
+        <Button
+          variant={"outline"}
+          size={"sm"}
+          onClick={nextPageHandler}
+          isDisabled={currentPage === totalPages - 1}
+        >
+          Next
+        </Button>
+      </HStack>
     </Box>
   );
 };

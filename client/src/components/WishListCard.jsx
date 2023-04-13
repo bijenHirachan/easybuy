@@ -12,7 +12,6 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { BsCartPlus, BsCartDash } from "react-icons/bs";
-import { AiOutlineDelete } from "react-icons/ai";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -20,7 +19,7 @@ import {
   addToCart,
   removeFromCart,
   updateItemsInWishlist,
-} from "../redux/actions/cartAction";
+} from "../redux/actions/cartActions";
 
 const WishListCard = ({ product }) => {
   const [inCart, setInCart] = useState(false);

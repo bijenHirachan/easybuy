@@ -2,7 +2,6 @@ import express from "express";
 import {
   createProduct,
   deleteProduct,
-  featuredProducts,
   getAllProducts,
   getSingleProduct,
   searchProducts,
@@ -23,8 +22,6 @@ router
   .get(getSingleProduct)
   .put(isAuthenticated, authorizeAdmin, updateProduct)
   .delete(isAuthenticated, authorizeAdmin, deleteProduct);
-
-router.route("/featured-products").get(featuredProducts);
 
 router.route("/search-products").get(searchProducts);
 export default router;

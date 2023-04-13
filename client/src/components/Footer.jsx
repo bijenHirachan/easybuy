@@ -36,7 +36,7 @@ const Footer = () => {
     if (error) {
       toast({
         description: error,
-        status: "error",
+        status: "info",
       });
       dispatch({ type: "clearError" });
     }
@@ -46,8 +46,8 @@ const Footer = () => {
         status: "success",
       });
       dispatch({ type: "clearMessage" });
-      setEmail("");
     }
+    setEmail("");
   }, [message, error]);
 
   return (

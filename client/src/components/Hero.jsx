@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Box,
   Grid,
@@ -134,7 +134,7 @@ const Hero = () => {
         </Box>
       ) : (
         <>
-          {featuredProducts && featuredProducts.length > 0 && (
+          {featuredProducts && featuredProducts.length >= 4 && (
             <Box marginTop={"48px"}>
               <Heading textAlign={"center"} color={"black100"}>
                 Featured Products
@@ -154,15 +154,15 @@ const Hero = () => {
                   border={"1px solid #dbd9e1"}
                   position={"relative"}
                 >
-                  <Link to={`/products/${featuredProducts[0]._id}`}>
+                  <Link to={`/products/${featuredProducts[0]?._id}`}>
                     <Image
                       boxSize={"150px"}
                       objectFit={"contain"}
-                      src={featuredProducts[0].poster.url}
+                      src={featuredProducts[0]?.poster.url}
                     />
                   </Link>
 
-                  <Badge price={featuredProducts[0].price} />
+                  <Badge price={featuredProducts[0]?.price} />
                 </GridItem>
                 <GridItem
                   colSpan={[1, 2]}
@@ -172,15 +172,15 @@ const Hero = () => {
                   border={"1px solid #dbd9e1"}
                   position={"relative"}
                 >
-                  <Link to={`/products/${featuredProducts[1]._id}`}>
+                  <Link to={`/products/${featuredProducts[1]?._id}`}>
                     <Image
                       boxSize={"150px"}
                       objectFit={"contain"}
-                      src={featuredProducts[1].poster.url}
+                      src={featuredProducts[1]?.poster.url}
                     />
                   </Link>
 
-                  <Badge price={featuredProducts[1].price} />
+                  <Badge price={featuredProducts[1]?.price} />
                 </GridItem>
                 <GridItem
                   colSpan={[1, 2]}
@@ -190,14 +190,14 @@ const Hero = () => {
                   border={"1px solid #dbd9e1"}
                   position={"relative"}
                 >
-                  <Link to={`/products/${featuredProducts[2]._id}`}>
+                  <Link to={`/products/${featuredProducts[2]?._id}`}>
                     <Image
                       boxSize={"150px"}
                       objectFit={"contain"}
-                      src={featuredProducts[2].poster.url}
+                      src={featuredProducts[2]?.poster.url}
                     />
                   </Link>
-                  <Badge price={featuredProducts[2].price} />
+                  <Badge price={featuredProducts[2]?.price} />
                 </GridItem>
                 <GridItem
                   colSpan={[1, 4]}
@@ -221,15 +221,15 @@ const Hero = () => {
                   border={"1px solid #dbd9e1"}
                   position={"relative"}
                 >
-                  <Link to={`/products/${featuredProducts[3]._id}`}>
+                  <Link to={`/products/${featuredProducts[3]?._id}`}>
                     <Image
                       boxSize={"150px"}
                       objectFit={"contain"}
-                      src={featuredProducts[3].poster.url}
+                      src={featuredProducts[3]?.poster.url}
                     />
                   </Link>
 
-                  <Badge price={featuredProducts[3].price} />
+                  <Badge price={featuredProducts[3]?.price} />
                 </GridItem>
               </Grid>
             </Box>

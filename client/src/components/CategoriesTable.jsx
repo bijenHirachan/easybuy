@@ -6,9 +6,12 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
+  HStack,
   IconButton,
   Table,
+  Tbody,
   Td,
+  Tfoot,
   Th,
   Thead,
   Tr,
@@ -20,10 +23,12 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   deleteCategory,
   getAllCategories,
-} from "../redux/actions/categoryAction";
+} from "../redux/actions/categoryActions";
 
 const CategoriesTable = () => {
   const [category, setCategory] = useState({ _id: "", title: "" });
+
+  const [currentPage, setCurrentPage] = useState(0);
 
   const dispatch = useDispatch();
 
@@ -31,13 +36,25 @@ const CategoriesTable = () => {
 
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const { loading, categories, error, message } = useSelector(
+  const { loading, categories, error, message, totalPages } = useSelector(
     (state) => state.category
   );
 
   const deleteCategoryHandler = async () => {
     await dispatch(deleteCategory(category._id));
-    await dispatch(getAllCategories());
+    await dispatch(getAllCategories(currentPage));
+  };
+
+  const prevPageHandler = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const nextPageHandler = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   const setCategoryHandler = (cat) => {
@@ -46,8 +63,8 @@ const CategoriesTable = () => {
   };
 
   useEffect(() => {
-    dispatch(getAllCategories());
-  }, []);
+    dispatch(getAllCategories(currentPage));
+  }, [currentPage]);
 
   useEffect(() => {
     if (message) onClose();
@@ -93,6 +110,8 @@ const CategoriesTable = () => {
             <Th>Category</Th>
             <Th>Actions</Th>
           </Tr>
+        </Thead>
+        <Tbody>
           {categories &&
             categories.length > 0 &&
             categories.map((cat) => (
@@ -108,7 +127,33 @@ const CategoriesTable = () => {
                 </Td>
               </Tr>
             ))}
-        </Thead>
+        </Tbody>
+        <Tfoot>
+          <Tr>
+            <Td colSpan={2}>
+              <HStack justifyContent={"space-between"}>
+                <Button
+                  variant={"outline"}
+                  rounded={0}
+                  size={"xs"}
+                  isDisabled={currentPage === 0}
+                  onClick={prevPageHandler}
+                >
+                  Prev
+                </Button>
+                <Button
+                  variant={"outline"}
+                  rounded={0}
+                  size={"xs"}
+                  isDisabled={currentPage === totalPages - 1}
+                  onClick={nextPageHandler}
+                >
+                  Next
+                </Button>
+              </HStack>
+            </Td>
+          </Tr>
+        </Tfoot>
       </Table>
     </>
   );

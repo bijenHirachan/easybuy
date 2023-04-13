@@ -1,6 +1,4 @@
 import {
-  Avatar,
-  Box,
   Button,
   FormControl,
   FormLabel,
@@ -16,7 +14,7 @@ import { fileUploadCSS } from "../pages/Register";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createProduct, loadProducts } from "../redux/actions/productActions";
-import { getAllCategories } from "../redux/actions/categoryAction";
+import { getAllCategories } from "../redux/actions/categoryActions";
 
 const fileUploadStyle = {
   "&::file-selector-button": fileUploadCSS,

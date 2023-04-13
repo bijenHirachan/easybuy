@@ -13,3 +13,8 @@ export const updateItemsInWishlist = (item) => (dispatch, getState) => {
   dispatch({ type: "updateWishlist", payload: item });
   localStorage.setItem("wishlist", JSON.stringify(getState().cart.wishlist));
 };
+
+export const emptyCart = () => (dispatch) => {
+  localStorage.removeItem("cartItems");
+  dispatch({ type: "emptyCart" });
+};

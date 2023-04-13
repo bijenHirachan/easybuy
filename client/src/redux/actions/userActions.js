@@ -168,20 +168,23 @@ export const resetPassword = (password, token) => async (dispatch) => {
   }
 };
 
-export const getAllUsers = () => async (dispatch) => {
-  try {
-    dispatch({ type: "getAllUsersRequest" });
+export const getAllUsers =
+  (page = 0) =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: "getAllUsersRequest" });
 
-    const { data } = await axios.get(`${server}/users`);
+      const { data } = await axios.get(`${server}/users?page=${page}`);
 
-    dispatch({ type: "getAllUsersSuccess", payload: data.users });
-  } catch (error) {
-    dispatch({
-      type: "getAllUsersFail",
-      payload: error.response.data.message,
-    });
-  }
-};
+      dispatch({ type: "getAllUsersSuccess", payload: data });
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: "getAllUsersFail",
+        payload: error.response.data.message,
+      });
+    }
+  };
 
 export const updateUserRole = (id) => async (dispatch) => {
   try {
@@ -225,13 +228,17 @@ export const subscribeNewsletter = (email) => async (dispatch) => {
   try {
     dispatch({ type: "newsletterRequest" });
 
-    const { data } = await axios.post(`${server}/subscribe`,{email},{
-      headers: {
-        headers:{
-          "Content-Type": "application/json"
-        }
+    const { data } = await axios.post(
+      `${server}/subscribe`,
+      { email },
+      {
+        headers: {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
       }
-    });
+    );
 
     dispatch({ type: "newsletterSuccess", payload: data.message });
   } catch (error) {
