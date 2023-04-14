@@ -24,6 +24,7 @@ import { emptyCart as clearCart } from "../redux/actions/cartActions";
 import CartItem from "../components/CartItem";
 import { MdOutlineShoppingCartCheckout } from "react-icons/md";
 import axios from "axios";
+import { server } from "../redux/store";
 
 const Cart = () => {
   const { cartItems } = useSelector((state) => state.cart);
@@ -36,14 +37,11 @@ const Cart = () => {
 
   const checkoutHandler = async () => {
     if (isAuthenticated && user) {
-      const { data } = await axios.post(
-        "http://localhost:5000/api/v1/create-checkout-session",
-        {
-          cartItems,
-          totalPrice,
-          user,
-        }
-      );
+      const { data } = await axios.post(`${server}/create-checkout-session`, {
+        cartItems,
+        totalPrice,
+        user,
+      });
       window.location.href = data.url;
     } else {
       toast({
