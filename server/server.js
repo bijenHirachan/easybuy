@@ -2,8 +2,6 @@ import app from "./app.js";
 import connectDB from "./database.js";
 import cloudinary from "cloudinary";
 
-connectDB();
-
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -12,6 +10,11 @@ cloudinary.v2.config({
 
 const PORT = process.env.PORT || 4000;
 
-app.listen(PORT, () => {
-  console.log(`Server listening on PORT: ${PORT}`);
-});
+const startApp = async () => {
+  await connectDB();
+  app.listen(PORT, () => {
+    console.log(`Server listening on PORT: ${PORT}`);
+  });
+};
+
+startApp();
