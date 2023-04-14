@@ -117,7 +117,7 @@ const Footer = () => {
 
           <Heading
             position={"absolute"}
-            bottom={16}
+            bottom={4}
             color={"white"}
             as="h4"
             size={"sm"}

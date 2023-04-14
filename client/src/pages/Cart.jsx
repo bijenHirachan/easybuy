@@ -17,9 +17,10 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import emptyCart from "../assets/emptyCart.png";
+import { emptyCart as clearCart } from "../redux/actions/cartActions";
 import CartItem from "../components/CartItem";
 import { MdOutlineShoppingCartCheckout } from "react-icons/md";
 import axios from "axios";
@@ -30,6 +31,8 @@ const Cart = () => {
   const [totalPrice, setTotalPrice] = useState(0);
 
   const toast = useToast();
+
+  const dispatch = useDispatch();
 
   const checkoutHandler = async () => {
     if (isAuthenticated && user) {
@@ -44,8 +47,8 @@ const Cart = () => {
       window.location.href = data.url;
     } else {
       toast({
-        description: "Please login first to complete the checkout",
         status: "info",
+        description: "Please login first & proceed to checkout",
       });
     }
   };
@@ -62,13 +65,25 @@ const Cart = () => {
     <>
       {cartItems && cartItems.length > 0 ? (
         <Grid py={6} templateColumns={["1fr", "1fr 1fr"]}>
-          <VStack
-            alignItems={"flex-start"}
-            borderRight={["none", "1px solid rgba(83, 78, 97, 0.25)"]}
-          >
-            {cartItems.map((item) => (
-              <CartItem key={item._id} item={item} />
-            ))}
+          <VStack w={"full"}>
+            <Button
+              variant={"link"}
+              alignSelf={"flex-start"}
+              fontWeight={400}
+              fontSize={"xs"}
+              onClick={() => dispatch(clearCart())}
+            >
+              Clear CartItems
+            </Button>
+            <VStack
+              w={"full"}
+              alignItems={"flex-start"}
+              borderRight={["none", "1px solid rgba(83, 78, 97, 0.25)"]}
+            >
+              {cartItems.map((item) => (
+                <CartItem key={item._id} item={item} />
+              ))}
+            </VStack>
           </VStack>
           <TableContainer px={6} py={16}>
             <Table size="sm">

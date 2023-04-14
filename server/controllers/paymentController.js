@@ -5,10 +5,20 @@ import { Order } from "../models/Order.js";
 export const createCheckoutSession = catchAsyncErrors(
   async (req, res, next) => {
     // console.log(req.body);
+
+    const items = req.body.cartItems.map((item) => {
+      return {
+        _id: item._id,
+        title: item.title,
+        price: item.price,
+        quantity: item.quantity,
+      };
+    });
+
     const customer = await stripe.customers.create({
       metadata: {
         userId: req.body.user._id,
-        cartItems: JSON.stringify(req.body.cartItems),
+        cartItems: JSON.stringify(items),
         total: req.body.totalPrice,
       },
     });
@@ -98,5 +108,33 @@ const createOrder = catchAsyncErrors(async (customer, data) => {
     total: data.amount_total,
     shipping: data.customer_details,
     payment_status: data.payment_status,
+  });
+});
+
+export const getAllOrders = catchAsyncErrors(async (req, res, next) => {
+  const orders = await Order.find();
+
+  res.status(200).json({
+    success: true,
+    orders,
+  });
+});
+
+export const changeDeliveryStatus = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+
+  const order = await Order.findById(id);
+
+  if (order.delivery_status === "pending") {
+    order.delivery_status = "delivered";
+  } else {
+    order.delivery_status = "pending";
+  }
+
+  await order.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Delivery status changed successfully",
   });
 });

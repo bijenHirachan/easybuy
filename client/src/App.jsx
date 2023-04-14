@@ -1,7 +1,7 @@
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
 import Navbar from "./components/Navbar";
-import { Container, useToast } from "@chakra-ui/react";
+import { Box, Container, useToast } from "@chakra-ui/react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Products from "./pages/Products";
 import Product from "./pages/Product";

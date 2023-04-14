@@ -248,3 +248,41 @@ export const subscribeNewsletter = (email) => async (dispatch) => {
     });
   }
 };
+
+export const getAllOrders = () => async (dispatch) => {
+  try {
+    dispatch({ type: "getAllOrdersRequest" });
+
+    const { data } = await axios.get(`${server}/orders`, {
+      withCredentials: true,
+    });
+
+    dispatch({ type: "getAllOrdersSuccess", payload: data.orders });
+  } catch (error) {
+    dispatch({
+      type: "getAllOrdersFail",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const changeDeliveryStatus = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: "changeDeliveryStatusRequest" });
+
+    const { data } = await axios.put(
+      `${server}/orders/${id}`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+
+    dispatch({ type: "changeDeliveryStatusSuccess", payload: data.orders });
+  } catch (error) {
+    dispatch({
+      type: "changeDeliveryStatusFail",
+      payload: error.response.data.message,
+    });
+  }
+};

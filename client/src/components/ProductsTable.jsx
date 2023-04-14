@@ -268,7 +268,7 @@ const ProductsTable = () => {
         <Table>
           <Thead>
             <Tr>
-              <Th>Avatar</Th>
+              <Th>Image</Th>
               <Th>Product</Th>
               <Th>Description</Th>
               <Th>Price</Th>

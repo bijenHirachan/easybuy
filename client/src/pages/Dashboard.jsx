@@ -31,6 +31,7 @@ import CreateProduct from "../components/CreateProduct";
 import CategoriesTable from "../components/CategoriesTable";
 import CreateCategory from "../components/CreateCategory";
 import FeaturedProducts from "../components/FeaturedProducts";
+import OrdersTable from "../components/OrdersTable";
 
 const Dashboard = ({ isAuthenticated, user }) => {
   const navigate = useNavigate();
@@ -75,6 +76,7 @@ const Dashboard = ({ isAuthenticated, user }) => {
           <Tab>Categories</Tab>
           <Tab>Create Category</Tab>
           <Tab>Featured Products</Tab>
+          <Tab>Orders</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -94,6 +96,9 @@ const Dashboard = ({ isAuthenticated, user }) => {
           </TabPanel>
           <TabPanel>
             <FeaturedProducts />
+          </TabPanel>
+          <TabPanel>
+            <OrdersTable />
           </TabPanel>
         </TabPanels>
       </Tabs>

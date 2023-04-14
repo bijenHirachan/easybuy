@@ -27,6 +27,10 @@ const theme = extendTheme({
     black10: "rgba(83, 78, 97, 0.10)",
     error: "#E04F4F",
   },
+  fonts: {
+    heading: `'Open Sans', sans-serif`,
+    body: `'Raleway', sans-serif`,
+  },
 });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -37,9 +41,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         toastOptions={{
           defaultOptions: {
             duration: 3000,
-            position: "top",
-            isClosable: true,
-            variant: "left-accent",
+            position: "top-right",
+            isClosable: false,
+            variant: "solid",
           },
         }}
       >

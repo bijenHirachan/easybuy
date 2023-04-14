@@ -178,8 +178,38 @@ const deleteUserRequest = createAction("deleteUserRequest");
 const deleteUserSuccess = createAction("deleteUserSuccess");
 const deleteUserFail = createAction("deleteUserFail");
 
+const getAllOrdersRequest = createAction("getAllOrdersRequest");
+const getAllOrdersSuccess = createAction("getAllOrdersSuccess");
+const getAllOrdersFail = createAction("getAllOrdersFail");
+
+const changeDeliveryStatusRequest = createAction("changeDeliveryStatusRequest");
+const changeDeliveryStatusSuccess = createAction("changeDeliveryStatusSuccess");
+const changeDeliveryStatusFail = createAction("changeDeliveryStatusFail");
+
 export const adminReducer = createReducer({}, (builder) => {
   builder
+    .addCase(changeDeliveryStatusRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(changeDeliveryStatusSuccess, (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase(changeDeliveryStatusFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase(getAllOrdersRequest, (state) => {
+      state.loading = true;
+    })
+    .addCase(getAllOrdersSuccess, (state, action) => {
+      state.loading = false;
+      state.orders = action.payload;
+    })
+    .addCase(getAllOrdersFail, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
     .addCase(deleteUserRequest, (state) => {
       state.loading = true;
     })
