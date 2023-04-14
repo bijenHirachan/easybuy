@@ -21,4 +21,5 @@ const store = configureStore({
 
 export default store;
 
-export const server = "http://localhost:5000/api/v1";
+// export const server = "http://localhost:5000/api/v1";
+export const server = "https://easybuy-backend.onrender.com/api/v1";
