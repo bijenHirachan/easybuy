@@ -9,6 +9,7 @@ import {
   MenuItem,
   MenuList,
   SimpleGrid,
+  Skeleton,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -23,7 +24,7 @@ import { getAllCategories } from "../redux/actions/categoryActions";
 import { BiCategory } from "react-icons/bi";
 
 const Products = () => {
-  const { error, message, products, totalPages } = useSelector(
+  const { error, message, products, totalPages, loading } = useSelector(
     (state) => state.product
   );
 
@@ -100,16 +101,28 @@ const Products = () => {
         </Menu>
       </HStack>
 
-      <SimpleGrid
-        spacing={4}
-        templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"}
-      >
-        {products &&
-          products.length > 0 &&
-          products.map((product) => (
-            <ProductCard key={product._id} product={product} />
-          ))}
-      </SimpleGrid>
+      {loading ? (
+        <SimpleGrid
+          spacing={4}
+          templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"}
+        >
+          <Skeleton boxSize={"400px"} />
+          <Skeleton boxSize={"400px"} />
+          <Skeleton boxSize={"400px"} />
+          <Skeleton boxSize={"400px"} />
+        </SimpleGrid>
+      ) : (
+        <SimpleGrid
+          spacing={4}
+          templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"}
+        >
+          {products &&
+            products.length > 0 &&
+            products.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+        </SimpleGrid>
+      )}
       <HStack py={4} justifyContent={"space-between"}>
         <Button
           variant={"outline"}

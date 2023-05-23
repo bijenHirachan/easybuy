@@ -14,9 +14,15 @@ const Login = ({ isAuthenticated }) => {
 
   const { message, loading } = useSelector((state) => state.user);
 
+  const { cartItems } = useSelector((state) => state.cart);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     await dispatch(login(email, password));
+
+    if (cartItems.length > 0) {
+      navigate("/cart");
+    }
   };
 
   useEffect(() => {
