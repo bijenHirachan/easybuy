@@ -78,7 +78,7 @@ const Login = ({ isAuthenticated }) => {
 
           <FormControl my={8}>
             <Button
-              isLoading={loading}
+              // isLoading={loading}
               type="submit"
               color={"white"}
               bg={"primary.dark"}
